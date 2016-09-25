@@ -29,23 +29,17 @@ public class ShipImpl implements Ship
                 break;
         }
         coordinates = new Coordinate[length];
+        for(int i = 0; i < length; i++)
+        {
+            coordinates[i] = new Coordinate(0,0);
+        }
         status = new Status[length];
     }
     @Override
     public void setCoordinates(Coordinate coord, Direction dir)
     {
-        /*
-        direction = dir;
-        if(direction.equals(Direction.DOWN))
-        {
-            for(int i = 0; i < length; i++)
-            {
-                coordinates[i].col = coord.col;
-                coordinates[i].row = coord.row + i;
-                status[i] = Status.SHIP;
-            }
-        }
-        else
+
+        if(this.dir == Direction.DOWN)
         {
             for(int i = 0; i < length; i++)
             {
@@ -54,7 +48,16 @@ public class ShipImpl implements Ship
                 status[i] = Status.SHIP;
             }
         }
-*/
+        else
+        {
+            for(int i = 0; i < length; i++)
+            {
+                coordinates[i].col = coord.col;
+                coordinates[i].row = coord.row + i;
+                status[i] = Status.SHIP;
+            }
+        }
+
     }
 
     @Override

@@ -52,9 +52,34 @@ public class ArrayGrid implements Grid {
             {
                 for(int z = 0; z < cols; z++)
                 {
-
+                    Status stat = Status.EMPTY;
+                    for(int x = 0; x < shipnum; x++)
+                    {
+                        Coordinate[] cur = ships[x].getCoordinates();
+                        Coordinate check = new Coordinate(i,z);
+                        for(int y = 0; y < cur.length; y++)
+                        {
+                            if(cur[y].col == i && cur[y].row == z)
+                            {
+                                stat = Status.SHIP;
+                            }
+                        }
+                    }
+                    if(stat == Status.EMPTY)
+                    {
+                        System.out.print("- ");
+                    }
+                    else
+                    {
+                        System.out.print("@ ");
+                    }
                 }
+                System.out.println();
             }
+        }
+        else
+        {
+
         }
     }
 
