@@ -8,6 +8,8 @@ public class Main {
         Coordinate c = new Coordinate(1,2);
         ShipImpl s = new ShipImpl(ShipType.BATTLESHIP,Direction.DOWN);
         s.setCoordinates(c,Direction.DOWN);
+        a.attempt(0,0,Status.HIT);
+        a.attempt(1,1,Status.MISS);
         a.placeShip(s);
         a.displayGrid(true);
     }

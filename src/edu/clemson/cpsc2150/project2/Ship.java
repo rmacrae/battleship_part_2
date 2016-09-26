@@ -6,6 +6,7 @@ public interface Ship {
     void setCoordinates(Coordinate coord, Direction dir);
     // returns an array of the ship’s coordinates
     Coordinate[] getCoordinates();
+    ShipType getType();
     // takes a shot at this ship’s coordinates and
     // returns Status.MISS, Status.HIT, or STATUS.SUNK
     Status shoot(Coordinate coord);

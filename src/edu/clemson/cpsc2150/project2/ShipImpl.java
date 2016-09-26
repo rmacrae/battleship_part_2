@@ -6,6 +6,7 @@ public class ShipImpl implements Ship
     Direction dir;
     Coordinate coordinates[];
     Status status[];
+    ShipType ship_type;
 
     ShipImpl(ShipType shipt, Direction dir)
     {
@@ -14,18 +15,23 @@ public class ShipImpl implements Ship
         switch(shipt)      {
             case CARRIER:
                 length = 5;
+                ship_type = ShipType.CARRIER;
                 break;
             case BATTLESHIP:
                 length = 4;
+                ship_type = ShipType.BATTLESHIP;
                 break;
             case CRUISER:
                 length = 3;
+                ship_type = ShipType.CRUISER;
                 break;
             case SUBMARINE:
                 length = 3;
+                ship_type = ShipType.SUBMARINE;
                 break;
             case DESTROYER:
                 length = 2;
+                ship_type = ShipType.DESTROYER;
                 break;
         }
         coordinates = new Coordinate[length];
@@ -65,6 +71,12 @@ public class ShipImpl implements Ship
     {
         return coordinates;
     }
+
+    @Override
+    public ShipType getType() {
+        return ship_type;
+    }
+
     @Override
     public Status shoot(Coordinate coord)
     {
