@@ -30,9 +30,19 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean isConflictingShipPlacement(Ship ship) {
-        for(int i = 0; i <= shipnum; i++)
+        for(int i = 0; i < rows; i++)
         {
-
+            for(int z = 0; z < cols; z++) {
+                for (int x = 0; x < shipnum; x++) {
+                    Coordinate[] cur = ship.getCoordinates();
+                    Coordinate check = new Coordinate(i, z);
+                    for (int y = 0; y < cur.length; y++) {
+                        if (cur[y].col == i && cur[y].row == z) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
         return false;
     }
@@ -61,7 +71,15 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean hasBeenAttempted(Coordinate coord) {
-        return false;
+        if(attempts[coord.row][coord.col] == Status.HIT || attempts[coord.row][coord.col] == Status.MISS)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     @Override
