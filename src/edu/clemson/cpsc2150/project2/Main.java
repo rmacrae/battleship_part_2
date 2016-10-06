@@ -10,13 +10,17 @@ public class Main {
 
         // setup the grid for each player
         Grid[] grids = new Grid[2];
+        ShipType s[] = new ShipType[5];
+        s[0] = ShipType.CARRIER;
+        s[1] = ShipType.BATTLESHIP;
+        s[2] = ShipType.CRUISER;
+        s[3] = ShipType.SUBMARINE;
+        s[4] = ShipType.DESTROYER;
+        grids[0] = new ArrayGrid();
+        grids[0].setGridDimensions(10, 10);
+        grids[1] = new BoundedSetGrid();
+        grids[1].setGridDimensions(10, 10);
         for (int player = 0; player < 2; ++player) {
-            // create the grid
-            grids[0] = new ArrayGrid();
-            grids[0].setGridDimensions(10, 10);
-            grids[1] = new BoundedSetGrid();
-            grids[1].setGridDimensions(10,10);
-
             // place the ships
             System.out.printf("PLAYER %d TURN\n", player + 1);
 
@@ -27,18 +31,19 @@ public class Main {
                     grids[player].displayGrid(true);
 
                     // read in the coordinates
-                    System.out.printf("\nPlace your %s: ", Grid.SHIP_NAMES[ship]);
-                    int[] coords = parseCoordinates(reader.readLine());
+                    System.out.printf("\nPlace your %s: ", s[ship]);
+                    Coordinate coords = parseCoordinates(reader.readLine());
 
                     // read in the direction
                     System.out.print("Choose direction (d/r): ");
-                    int dir = parseDirection(reader.readLine());
+                    Direction dir = parseDirection(reader.readLine());
 
                     // can we place the ship here?
-                    if (dir != Grid.UNKNOWN && !grids[player].isConflictingShipPlacement(coords[0], coords[1], Grid.SHIP_LENGTHS[ship], dir)) {
+                    Ship temp = new ShipImpl(s[ship],dir);
+                    temp.setCoordinates(coords,dir);
+                    if (!grids[player].isConflictingShipPlacement(temp)) {
                         // place the ship!
-                        grids[player].setShipToBePlaced(ship);
-                        grids[player].placeShip(coords[0], coords[1], Grid.SHIP_LENGTHS[ship], dir);
+                        grids[player].placeShip(temp);
                         shipPlaced = true;
                     } else {
                         // print error message
@@ -57,13 +62,13 @@ public class Main {
 
             // get the coordinates for the next shot
             boolean isValidShot = false;
-            int[] coords;
+            Coordinate coords;
             do {
                 System.out.print("Take a shot: ");
                 coords = parseCoordinates(reader.readLine());
 
                 // has a shot at this location already been attempted?
-                if (grids[opponent].hasBeenAttempted(coords[0], coords[1])) {
+                if (grids[opponent].hasBeenAttempted(coords)) {
                     System.out.println("You have already shot at that location! Please try again.");
                 } else {
                     isValidShot = true;
@@ -71,19 +76,19 @@ public class Main {
             } while (!isValidShot);
 
             // take the shot at the opponent's grid
-            int result = grids[opponent].shoot(coords[0], coords[1]);
+            Status result = grids[opponent].shoot(coords);
 
             // display the result of the shot
             switch (result) {
-                case Grid.SHOT_MISS:
+                case MISS:
                     System.out.println("Miss!");
                     break;
-                case Grid.SHOT_HIT:
+                case HIT:
                     System.out.println("Hit!");
                     break;
-                case Grid.SHOT_SUNK:
-                    int ship = grids[opponent].getLastSunkShip();
-                    System.out.printf("Hit!\nSunk the %s!\n", Grid.SHIP_NAMES[ship]);
+                case SUNK:
+                    Ship ship = grids[opponent].getLastSunkShip();
+                    System.out.printf("Hit! Sunk the  %s", ship.getType().toString());
                     break;
             }
 
@@ -103,4 +108,19 @@ public class Main {
         System.out.printf("\nGame over! Player %d wins!\n", winner);
     }
 
+    public static Coordinate parseCoordinates(String input) {
+        // initialize coordinate array
+        String[] tokens = input.split("\\D+");
+        Coordinate coords = new Coordinate(Integer.parseInt(tokens[0]),Integer.parseInt(tokens[1]));
+        return coords;
+    }
+
+    public static Direction parseDirection(String input) {
+        if (input.toLowerCase().equals("d")) {
+            return Direction.DOWN;
+        } else if (input.toLowerCase().equals("r")) {
+            return Direction.RIGHT;
+        }
+        return Direction.RIGHT;
+    }
 }

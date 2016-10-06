@@ -40,6 +40,11 @@ public class ShipImpl implements Ship
             coordinates[i] = new Coordinate(0,0);
         }
         status = new Status[length];
+
+        for(int z = 0; z < length; z++)
+        {
+            status[z] = Status.EMPTY;
+        }
     }
     @Override
     public void setCoordinates(Coordinate coord, Direction dir)
@@ -82,7 +87,7 @@ public class ShipImpl implements Ship
     {
         for(int i = 0; i < length; i++)
         {
-            if(coordinates[i].row == coord.row && coordinates[i].col == coord.col)
+            if(coordinates[i].equals(coord))
             {
                 status[i] = Status.HIT;
                 if(isSunk() == true)
@@ -103,7 +108,7 @@ public class ShipImpl implements Ship
         int hits = 1;
         for(int z = 0; z < length; z++)
         {
-            if (status[z].equals(Status.HIT))
+            if (status[z] == Status.HIT)
             {
                 hits++;
 
