@@ -26,11 +26,20 @@ public class BoundedSetGrid implements Grid {
     @Override
     public boolean isConflictingShipPlacement(Ship ship) {
 
+
+        Coordinate temp[] = ship.getCoordinates();
+        for(int a = 0; a < temp.length; a++)
+        {
+            if(temp[a].row > rows || temp[a].col > cols)
+            {
+                return true;
+            }
+        }
         if(shipnum == 0)
         {
             return false;
         }
-        Coordinate temp[] = ship.getCoordinates();
+
         for(int i = 0; i < ships.length; i++)
         {
             if(ships[i] != null) {
@@ -97,7 +106,7 @@ public class BoundedSetGrid implements Grid {
 
         }
         System.out.println();
-        if(showShips == true)
+        if(showShips)
         {
             for(int i = 0; i < rows; i++)
             {
@@ -108,7 +117,6 @@ public class BoundedSetGrid implements Grid {
                     for(int x = 0; x < shipnum; x++)
                     {
                         Coordinate[] cur = ships[x].getCoordinates();
-                        Coordinate check = new Coordinate(i,z);
                         for(int y = 0; y < cur.length; y++)
                         {
                             if(cur[y].col == i && cur[y].row == z)
@@ -174,9 +182,6 @@ public class BoundedSetGrid implements Grid {
 
     @Override
     public boolean isGameOver() {
-        if(hits.sizeOfSet() == 16)
-            return true;
-        else
-            return false;
+        return hits.sizeOfSet() == 17;
     }
 }

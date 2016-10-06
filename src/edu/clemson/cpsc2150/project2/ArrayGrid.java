@@ -8,6 +8,7 @@ public class ArrayGrid implements Grid {
     private int shipnum;
     private int rows;
     private int cols;
+    private int count = 0;
 
     @Override
     public void setGridDimensions(int rows, int cols) {
@@ -32,11 +33,19 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean isConflictingShipPlacement(Ship ship) {
+
+        Coordinate temp[] = ship.getCoordinates();
+        for(int a = 0; a < temp.length; a++)
+        {
+            if(temp[a].row > rows || temp[a].col > cols)
+            {
+                return true;
+            }
+        }
         if(shipnum == 0)
         {
             return false;
         }
-        Coordinate temp[] = ship.getCoordinates();
         for(int i = 0; i < shipnum; i++)
         {
                 Coordinate[] cur_ship = ships_array[i].getCoordinates();
@@ -66,6 +75,7 @@ public class ArrayGrid implements Grid {
         {
             if(ships_array[z].shoot(coord) == Status.HIT) {
                 attempts[coord.row][coord.col] = Status.HIT;
+                count++;
                 return Status.HIT;
             }
         }
@@ -80,14 +90,7 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean hasBeenAttempted(Coordinate coord) {
-        if(attempts[coord.row][coord.col] == Status.HIT || attempts[coord.row][coord.col] == Status.MISS)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return attempts[coord.row][coord.col] == Status.HIT || attempts[coord.row][coord.col] == Status.MISS;
 
     }
 
@@ -99,7 +102,7 @@ public class ArrayGrid implements Grid {
 
         }
         System.out.println();
-        if(showships_array == true)
+        if(showships_array)
         {
             for(int i = 0; i < rows; i++)
             {
@@ -110,7 +113,6 @@ public class ArrayGrid implements Grid {
                     for(int x = 0; x < shipnum; x++)
                     {
                         Coordinate[] cur = ships_array[x].getCoordinates();
-                        Coordinate check = new Coordinate(i,z);
                         for(int y = 0; y < cur.length; y++)
                         {
                             if(cur[y].col == i && cur[y].row == z)
@@ -159,6 +161,6 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean isGameOver() {
-        return false;
+        return count == 17;
     }
 }
