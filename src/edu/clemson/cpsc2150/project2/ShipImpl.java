@@ -8,7 +8,7 @@ public class ShipImpl implements Ship
     Status status[];
     ShipType ship_type;
 
-    ShipImpl(ShipType shipt, Direction dir)
+    public ShipImpl(ShipType shipt, Direction dir)
     {
         this.dir = dir;
 

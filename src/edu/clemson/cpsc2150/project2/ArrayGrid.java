@@ -68,6 +68,7 @@ public class ArrayGrid implements Grid {
             if(ships_array[i].shoot(coord) == Status.SUNK) {
                 lastsunk = ships_array[i];
                 attempts[coord.row][coord.col] = Status.SUNK;
+                count++;
                 return Status.SUNK;
             }
         }
@@ -90,7 +91,10 @@ public class ArrayGrid implements Grid {
 
     @Override
     public boolean hasBeenAttempted(Coordinate coord) {
-        return attempts[coord.row][coord.col] == Status.HIT || attempts[coord.row][coord.col] == Status.MISS;
+        if (attempts[coord.row][coord.col] == Status.HIT) return true;
+        if (attempts[coord.row][coord.col] == Status.MISS) return true;
+        if (attempts[coord.row][coord.col] == Status.SUNK) return true;
+        return false;
 
     }
 

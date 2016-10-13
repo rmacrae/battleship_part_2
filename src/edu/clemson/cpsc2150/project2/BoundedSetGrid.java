@@ -7,8 +7,8 @@ public class BoundedSetGrid implements Grid {
     private BoundedSet miss;
     private Ship lastsunk;
     private int shipnum = 0;
-    private int rows;
-    private int cols;
+    public int rows;
+    public int cols;
     @Override
     public void setGridDimensions(int rows, int cols) {
         this.rows = rows;
